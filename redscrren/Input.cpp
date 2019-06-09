@@ -5,7 +5,6 @@
 using namespace std;
 Input input2;
 
-PlayerManager objectmanager2;
 
 enum InputState
 {

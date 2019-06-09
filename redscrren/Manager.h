@@ -1,5 +1,4 @@
 #pragma once
-#include <glew.h>
 #include <freeglut.h>
 #include <glm.hpp>
 #include "gtc/type_ptr.hpp"

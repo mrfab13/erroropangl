@@ -1,12 +1,11 @@
 #pragma once
-#include "Camera.h"
-#include "TextureLoader.h"
+#include <glew.h>
 #include <iostream>
 #include <vector>
 #include <windows.h>
-#include <freeglut.h>
 #include <SOIL.h>
 
+#include "Camera.h"
 
 
 
@@ -14,6 +13,7 @@
 class Object
 {
 public:
+	GLuint LoadTexture(const char * path);
 	Object(int bulletDir, float DeltaTime, glm::vec3 objPos, GLuint program);
 	~Object();
 	bool Process(float DeltaTime, camera* camera1, GLuint program);
@@ -25,7 +25,6 @@ private:
 	glm::vec3 Ppos = glm::vec3(0.0f, 0.0f, 0.0f); 
 	glm::vec3 veloc = glm::vec3(0.0f, 0.0f, 0.0f);
 
-	unsigned int textureID;
 	GLuint texture;
 	GLuint VBOmap;
 	GLuint VAOmap;

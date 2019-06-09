@@ -150,7 +150,6 @@
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="PlayerManager.cpp" />
     <ClCompile Include="ShaderLoader.cpp" />
-    <ClCompile Include="Sphere.cpp" />
     <ClCompile Include="TextLabel.cpp" />
     <ClCompile Include="TextureLoader.cpp" />
   </ItemGroup>
@@ -167,7 +166,6 @@
     <ClInclude Include="Object.h" />
     <ClInclude Include="PlayerManager.h" />
     <ClInclude Include="ShaderLoader.h" />
-    <ClInclude Include="Sphere.h" />
     <ClInclude Include="TextLabel.h" />
     <ClInclude Include="TextureLoader.h" />
   </ItemGroup>

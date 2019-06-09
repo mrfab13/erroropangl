@@ -1,7 +1,6 @@
 #pragma once
 
-#include <glew.h>
-#include <freeglut.h>
+
 #include <SOIL.h>
 #include <glm.hpp>
 #include "gtc/matrix_transform.hpp"

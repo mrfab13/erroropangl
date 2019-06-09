@@ -1,17 +1,15 @@
 #pragma once
 
-#include <glew.h>
-#include <freeglut.h>
 #include <iostream>
 #include <vector>
 #include <windows.h>
 #include "glm.hpp"
 #include "gtc/matrix_transform.hpp"
 #include "gtc/type_ptr.hpp"
-
 #include "Audio.h"
 #include "Input.h"
 #include "Object.h"
+
 
 
 class PlayerManager

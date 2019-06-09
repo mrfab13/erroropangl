@@ -176,7 +176,7 @@ void PlayerManager::FIRETHECANNONS_AHHHHHHHHH(GLfloat deltatime, camera* camera1
 
 void PlayerManager::BulletProcess(GLfloat deltaTime, camera* camera1, GLuint program)
 {
-	for (int i = 0; i < bullets.size(); i++)
+	for (int i = 0; i < (int)bullets.size(); i++)
 	{
 		bool test = bullets.at(i)->Process(deltaTime, camera1, program);
 		if (test == false)
@@ -184,7 +184,7 @@ void PlayerManager::BulletProcess(GLfloat deltaTime, camera* camera1, GLuint pro
 
 			std::vector<Object*> tmp;
 
-			for (int k = 0; k< bullets.size(); k++)
+			for (int k = 0; k < (int)bullets.size(); k++)
 			{
 				if (k != i) 
 				{
@@ -195,7 +195,7 @@ void PlayerManager::BulletProcess(GLfloat deltaTime, camera* camera1, GLuint pro
 			delete bullets[i];
 			bullets.clear();
 
-			for (int k = 0; k < tmp.size(); k++)
+			for (int k = 0; k < (int)tmp.size(); k++)
 			{
 				if (k != i)
 				{

@@ -9,7 +9,7 @@
 using namespace std;
 // GL Includes
 
-#include <glew.h>
+//#include <glew.h>
 #include <freeglut.h>
 #include <SOIL.h>
 

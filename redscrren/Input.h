@@ -1,8 +1,6 @@
 #pragma once
 #include <iostream>
-#include <freeglut.h>
 #include <vector>
-#include "PlayerManager.h"
 #include "glm.hpp"
 
 

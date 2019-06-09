@@ -20,7 +20,6 @@
 #include "TextLabel.h"
 #include "EnemyManager.h"
 #include "TextureLoader.h"
-#include "Sphere.h"
 #include "MeshManager.h"
 #include "CubeMap.h"
 #include "Model.h"
@@ -264,7 +263,6 @@ void Render()
 			glm::mat4 backProj_calc = camera1.MVP(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(2.0f, 1.0f, 2.0f), rotationZ);
 			glm::mat4 backmodel = camera1.Model(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(2.0f, 1.0f, 2.0f), rotationZ);
 
-
 			glUseProgram(program);
 
 			GLuint mvpLoc2 = glGetUniformLocation(program, "proj_calc");
@@ -378,12 +376,14 @@ void Render()
 	glBindVertexArray(0);
 	glUseProgram(0);
 
+	playermanager.FIRETHECANNONS_AHHHHHHHHH(deltaTime, &camera1, program);
+
+
 	glm::vec3 modelpos = glm::vec3(0.0f, 0.0f, 1.0f);
 	glm::vec3 modelscale = glm::vec3(0.2f, 0.2f, 0.2f);
 	model.Render(modelpos, modelscale, rotationZ);
 
 
-	playermanager.FIRETHECANNONS_AHHHHHHHHH(deltaTime, &camera1, program);
 
 	glutSwapBuffers();
 }
