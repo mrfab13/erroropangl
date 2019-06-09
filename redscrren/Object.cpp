@@ -1,12 +1,7 @@
 #include "Object.h"
 
-GLuint Object::LoadTexture(const char *path)
+void Object::LoadTexture(const char *path)
 {
-
-	GLuint texture;
-
-	unsigned char* image;
-
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
@@ -15,22 +10,18 @@ GLuint Object::LoadTexture(const char *path)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture);
+	glGenTextures(1, &this->texture);
+	glBindTexture(GL_TEXTURE_2D, this->texture);
 
 
 	int width, height;
 	//path is the path to the directory with the texture to load
-	image = SOIL_load_image(path, &width, &height, 0, SOIL_LOAD_RGBA);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
+	this->image = SOIL_load_image(path, &width, &height, 0, SOIL_LOAD_RGBA);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, this->image);
 
 	glGenerateMipmap(GL_TEXTURE_2D);
-	SOIL_free_image_data(image);
+	SOIL_free_image_data(this->image);
 	glBindTexture(GL_TEXTURE_2D, 0);
-
-	//return the texture
-	return texture;
-
 }
 
 Object::Object(int bulletDir, float DeltaTime, glm::vec3 objPos, GLuint program)
@@ -82,18 +73,15 @@ Object::Object(int bulletDir, float DeltaTime, glm::vec3 objPos, GLuint program)
 
 		GLuint VAOtemp = NULL;
 
-		glGenVertexArrays(1, &VAOtemp);
-		glBindVertexArray(VAOtemp);
+		glGenVertexArrays(1, &this->VAOmap);
+		glBindVertexArray(this->VAOmap);
 
-		glGenVertexArrays(1, &VAOmap);
-		glBindVertexArray(VAOmap);
-
-		glGenBuffers(1, &EBOmap);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBOmap);
+		glGenBuffers(1, &this->EBOmap);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->EBOmap);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices4), indices4, GL_STATIC_DRAW);
 
-		glGenBuffers(1, &VBOmap);
-		glBindBuffer(GL_ARRAY_BUFFER, VBOmap);
+		glGenBuffers(1, &this->VBOmap);
+		glBindBuffer(GL_ARRAY_BUFFER, this->VBOmap);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices4), vertices4, GL_STATIC_DRAW);
 
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)0);
@@ -103,12 +91,10 @@ Object::Object(int bulletDir, float DeltaTime, glm::vec3 objPos, GLuint program)
 		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(6 * sizeof(GLfloat)));
 		glEnableVertexAttribArray(2);
 
-		VAOmap = VAOtemp;
-
-		glActiveTexture(GL_TEXTURE4);
-		texture = LoadTexture("ass/pics/bazinga.jpg");
-		glBindTexture(GL_TEXTURE_2D, texture);
-		glUniform1i(glGetUniformLocation(program, "tex"), 4);
+		glActiveTexture(GL_TEXTURE0);
+		LoadTexture("ass/pics/bazinga.jpg");
+		glBindTexture(GL_TEXTURE_2D, this->texture);
+		glUniform1i(glGetUniformLocation(program, "tex"), 0);
 		std::cout << "pew" << std::endl;
 	}
 }
@@ -152,7 +138,7 @@ void Object::Render(camera* camera1, GLuint program)
 
 	glBindVertexArray(this->VAOmap);
 
-	glActiveTexture(GL_TEXTURE4);
+	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, this->texture);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);

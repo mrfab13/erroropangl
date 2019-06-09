@@ -260,7 +260,7 @@ void Render()
 
 			#pragma region "bg"
 
-			glm::mat4 backProj_calc = camera1.MVP(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(2.0f, 1.0f, 2.0f), rotationZ);
+			/*glm::mat4 backProj_calc = camera1.MVP(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(2.0f, 1.0f, 2.0f), rotationZ);
 			glm::mat4 backmodel = camera1.Model(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(2.0f, 1.0f, 2.0f), rotationZ);
 
 			glUseProgram(program);
@@ -277,7 +277,7 @@ void Render()
 			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 			glBindVertexArray(0);
 			glUseProgram(0);
-
+*/
 			#pragma endregion 
 
 			#pragma region "player"

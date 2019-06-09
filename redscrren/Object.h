@@ -13,13 +13,14 @@
 class Object
 {
 public:
-	GLuint LoadTexture(const char * path);
+	void LoadTexture(const char * path);
 	Object(int bulletDir, float DeltaTime, glm::vec3 objPos, GLuint program);
 	~Object();
 	bool Process(float DeltaTime, camera* camera1, GLuint program);
 	void Render(camera* camera1, GLuint program);
 
 private:
+	unsigned char* image;
 	float lifetime = 0.0f;
 	float position = 0.0f;
 	glm::vec3 Ppos = glm::vec3(0.0f, 0.0f, 0.0f); 
