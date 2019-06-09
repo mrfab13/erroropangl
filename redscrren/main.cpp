@@ -372,11 +372,12 @@ void Render()
 	label8.SetText(to_string(fps));
 	label8.Render();
 
+	playermanager.FIRETHECANNONS_AHHHHHHHHH(deltaTime, &camera1, program);
+
 
 	glBindVertexArray(0);
 	glUseProgram(0);
 
-	playermanager.FIRETHECANNONS_AHHHHHHHHH(deltaTime, &camera1, program);
 
 
 	glm::vec3 modelpos = glm::vec3(0.0f, 0.0f, 1.0f);
@@ -509,28 +510,28 @@ press o to start the next level)", "ass/fonts/comic.ttf", glm::vec2(-600.0f, 300
 
 	#pragma region "bg"
 
-	glGenVertexArrays(1, &VAObg);
-	glBindVertexArray(VAObg);
+	//glGenVertexArrays(1, &VAObg);
+	//glBindVertexArray(VAObg);
 
-	glGenBuffers(1, &EBObg);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBObg);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices2), indices2, GL_STATIC_DRAW);
+	//glGenBuffers(1, &EBObg);
+	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBObg);
+	//glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices2), indices2, GL_STATIC_DRAW);
 
-	glGenBuffers(1, &VBObg);
-	glBindBuffer(GL_ARRAY_BUFFER, VBObg);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_STATIC_DRAW);
+	//glGenBuffers(1, &VBObg);
+	//glBindBuffer(GL_ARRAY_BUFFER, VBObg);
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_STATIC_DRAW);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)0);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(6 * sizeof(GLfloat)));
-	glEnableVertexAttribArray(2);
+	//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)0);
+	//glEnableVertexAttribArray(0);
+	//glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+	//glEnableVertexAttribArray(1);
+	//glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(6 * sizeof(GLfloat)));
+	//glEnableVertexAttribArray(2);
 
-	glActiveTexture(GL_TEXTURE2);
-	bg = TL.loadTexture("ass/pics/bruh.jpg");
-	glBindTexture(GL_TEXTURE_2D, bg);
-	glUniform1i(glGetUniformLocation(program, "tex"), 2);
+	//glActiveTexture(GL_TEXTURE2);
+	//bg = TL.loadTexture("ass/pics/bruh.jpg");
+	//glBindTexture(GL_TEXTURE_2D, bg);
+	//glUniform1i(glGetUniformLocation(program, "tex"), 2);
 
 #pragma endregion 
 

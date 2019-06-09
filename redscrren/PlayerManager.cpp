@@ -176,6 +176,7 @@ void PlayerManager::FIRETHECANNONS_AHHHHHHHHH(GLfloat deltatime, camera* camera1
 
 void PlayerManager::BulletProcess(GLfloat deltaTime, camera* camera1, GLuint program)
 {
+	std::system("cls");
 	for (int i = 0; i < (int)bullets.size(); i++)
 	{
 		bool test = bullets.at(i)->Process(deltaTime, camera1, program);

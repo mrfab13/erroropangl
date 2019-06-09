@@ -36,29 +36,29 @@ GLuint Object::LoadTexture(const char *path)
 Object::Object(int bulletDir, float DeltaTime, glm::vec3 objPos, GLuint program)
 {
 	bool render = false;
+	float speed = 0.05f;
 	if (bulletDir <= 3)
 	{
-		veloc.y -= 1.0f * DeltaTime;
+		veloc.z -= 1.0f * DeltaTime * speed;
 		render = true;
 	}
 	else if (bulletDir >= 7)
 	{
-		veloc.y += 1.0f * DeltaTime;
+		veloc.z += 1.0f * DeltaTime * speed;
 		render = true;
 
 	}
 
 	if (bulletDir % 3 == 0) // 963
 	{
-		veloc.x += 1.0f * DeltaTime;
+		veloc.x += 1.0f * DeltaTime * speed;
 		render = true;
 
 	}
 	else if (bulletDir % 3 == 1) //741
 	{
-		veloc.x -= 1.0f * DeltaTime;
+		veloc.x -= 1.0f * DeltaTime * speed;
 		render = true;
-
 	}
 
 	Ppos = objPos;
@@ -105,28 +105,27 @@ Object::Object(int bulletDir, float DeltaTime, glm::vec3 objPos, GLuint program)
 
 		VAOmap = VAOtemp;
 
-		glActiveTexture(GL_TEXTURE3);
+		glActiveTexture(GL_TEXTURE4);
 		texture = LoadTexture("ass/pics/bazinga.jpg");
 		glBindTexture(GL_TEXTURE_2D, texture);
-		glUniform1i(glGetUniformLocation(program, "tex"), 3);
-
+		glUniform1i(glGetUniformLocation(program, "tex"), 4);
+		std::cout << "pew" << std::endl;
 	}
-
-
-
 }
 
 Object::~Object()
 {
-
+	
 }
 
 bool Object::Process(float DeltaTime, camera* camera1, GLuint program)
 {
+	std::cout << this->Ppos.x <<" " << this->Ppos.z << std::endl;
+
 	Ppos += veloc;
 	lifetime += DeltaTime;
 	Render(camera1, program);
-	if (lifetime >= 15.0f)
+	if (lifetime >= 50.0f)
 	{
 		return (false);
 	}
@@ -152,6 +151,8 @@ void Object::Render(camera* camera1, GLuint program)
 	glUniformMatrix4fv(eModelLoc, 1, GL_FALSE, glm::value_ptr(enemyModel));
 
 	glBindVertexArray(this->VAOmap);
+
+	glActiveTexture(GL_TEXTURE4);
 	glBindTexture(GL_TEXTURE_2D, this->texture);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
