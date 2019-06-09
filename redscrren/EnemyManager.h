@@ -1,4 +1,5 @@
 #pragma once
+
 #include <freeglut.h>
 #include <iostream>
 #include <vector>
@@ -15,11 +16,15 @@ class EnemyManager
 public:
 
 	EnemyManager();
+	EnemyManager(glm::vec3 modelpos, glm::vec3 modelscale);
 	~EnemyManager();
 	glm::vec3 GetEPos();
 	glm::vec3 GetE2Pos();
 	void SetEPos(glm::vec3);
 	void SetE2Pos(glm::vec3);
+
+	glm::vec3 GetModelpos();
+	glm::vec3 GetModelscale();
 
 	void initializeEPos();
 	void initializeE2Pos();
@@ -30,7 +35,7 @@ public:
 
 
 	void initializespeedanddir();
-	void Emovement(GLfloat deltaTime, float ScreenW, float screenH, Audio1& audio2, int type);
+	void Emovement(GLfloat deltaTime, int type, int Wavecheck);
 
 	bool checkCollision(glm::vec4 box1, glm::vec4 box2);
 
@@ -45,4 +50,7 @@ private:
 	glm::vec2 randxy = glm::vec2(0.0f, 0.0f);
 
 	float speed = 2.0f;
+
+	glm::vec3 Modelpos;
+	glm::vec3 Modelscale;
 };

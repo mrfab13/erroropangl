@@ -12,7 +12,7 @@ public:
 	camera();
 	~camera();
 	void initializeCamera();
-	void calculate(GLfloat currentTime);
+	void calculate(GLfloat currentTime, int type);
 	glm::mat4 getView();
 	glm::mat4 getProj();
 	glm::mat4 Model(glm::vec3 position, glm::vec3 scale, glm::mat4 rotationz);

@@ -20,13 +20,22 @@ void camera::initializeCamera()
 
 }
 
-void camera::calculate(GLfloat currentTime)
+void camera::calculate(GLfloat currentTime, int type)
 {
-	
-	//rotMat2 = glm::rotate(glm::mat4(), glm::radians(0.01f * currentTime), glm::vec3(0, 1, 0));
-	//rotMat = glm::rotate(glm::mat4(), glm::radians(-30.0f), glm::vec3(1, 0, 0));
+	if (type == 2)
+	{
+		rotMat2 = glm::rotate(glm::mat4(), glm::radians(0.05f * currentTime), glm::vec3(0, 1, 0));
+		rotMat = glm::rotate(glm::mat4(), glm::radians(-30.0f), glm::vec3(1, 0, 0));
+		newPos = rotMat * glm::vec4(0, -1, 3, 1) * rotMat2; 
+	}
+	else
+	{
+		newPos = glm::vec4(0, 2, 3, 1); //0, 2, 3, 1
 
-	newPos = /*rotMat **/ glm::vec4(0, 2, 3, 1) /** rotMat2*/;
+	}
+
+
+
 	camPos = glm::vec3(newPos);
 	camTar = glm::vec3(0.0f, 0.0f, 0.0f);
 	view = glm::lookAt(camPos, camTar, camUpDir);

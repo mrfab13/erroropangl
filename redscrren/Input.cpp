@@ -37,7 +37,6 @@ bool Input::CheckKeyDown(int key)
 {
 	if (KeyState[key] == INPUT_DOWN)
 	{
-
 		return(true);
 	}
 	return(false);

@@ -24,7 +24,7 @@ void PlayerManager::SetObjectPos(glm::vec3 temp)
 
 void PlayerManager::initializeObjPos()
 {
-	objPos = glm::vec3(0.0f, 0.0f, 0.0f);
+	objPos = glm::vec3(0.0f, -1.0f, 0.0f);
 }
 
 void PlayerManager::setbulletDir(int Dir)
@@ -41,7 +41,7 @@ void PlayerManager::movement(GLfloat deltaTime)
 	if (input1.CheckKeyDown('s') == true)
 	{
 
-		if (temp.z < 1.0f)
+		if (temp.z < 1.4f)
 		{
 			temp.z += speed * deltaTime;
 			SetObjectPos(temp);
@@ -51,7 +51,7 @@ void PlayerManager::movement(GLfloat deltaTime)
 	}
 	if (input1.CheckKeyDown('a') == true)
 	{
-		if (temp.x > -1.0f)
+		if (temp.x > -4.4f)
 		{
 			temp.x -= speed * deltaTime;
 			SetObjectPos(temp);
@@ -60,7 +60,7 @@ void PlayerManager::movement(GLfloat deltaTime)
 	}
 	if (input1.CheckKeyDown('w') == true)
 	{
-		if (temp.z > -1.0f)
+		if (temp.z > -6.4f)
 		{
 			temp.z -= speed * deltaTime;
 			SetObjectPos(temp);
@@ -69,7 +69,7 @@ void PlayerManager::movement(GLfloat deltaTime)
 	}
 	if (input1.CheckKeyDown('d') == true)
 	{
-		if (temp.x < 1.0f)
+		if (temp.x < 3.4f)
 		{
 			temp.x += speed * deltaTime;
 			SetObjectPos(temp);
@@ -161,7 +161,7 @@ void PlayerManager::movement(GLfloat deltaTime)
 void PlayerManager::FIRETHECANNONS_AHHHHHHHHH(GLfloat deltatime, camera* camera1, GLuint program)
 {
 	reloadTime += deltatime;
-	if (reloadTime >= 1.0f)
+	if (reloadTime >= 15.0f)
 	{
 		reloadTime = 0.0f;
 
@@ -176,7 +176,6 @@ void PlayerManager::FIRETHECANNONS_AHHHHHHHHH(GLfloat deltatime, camera* camera1
 
 void PlayerManager::BulletProcess(GLfloat deltaTime, camera* camera1, GLuint program)
 {
-	std::system("cls");
 	for (int i = 0; i < (int)bullets.size(); i++)
 	{
 		bool test = bullets.at(i)->Process(deltaTime, camera1, program);
@@ -209,8 +208,8 @@ void PlayerManager::BulletProcess(GLfloat deltaTime, camera* camera1, GLuint pro
 	}
 }
 
-
-
-
-
+std::vector<Object*> PlayerManager::ReturnBullets()
+{
+	return (bullets);
+}
 

@@ -27,32 +27,33 @@ void Object::LoadTexture(const char *path)
 Object::Object(int bulletDir, float DeltaTime, glm::vec3 objPos, GLuint program)
 {
 	bool render = false;
-	float speed = 0.05f;
+	float speed = 0.07f;
 	if (bulletDir <= 3)
 	{
-		veloc.z -= 1.0f * DeltaTime * speed;
+		veloc.z += 1.0f * speed;
 		render = true;
 	}
 	else if (bulletDir >= 7)
 	{
-		veloc.z += 1.0f * DeltaTime * speed;
+		veloc.z -= 1.0f * speed;
 		render = true;
 
 	}
 
 	if (bulletDir % 3 == 0) // 963
 	{
-		veloc.x += 1.0f * DeltaTime * speed;
+		veloc.x += 1.0f * speed;
 		render = true;
 
 	}
 	else if (bulletDir % 3 == 1) //741
 	{
-		veloc.x -= 1.0f * DeltaTime * speed;
+		veloc.x -= 1.0f * speed;
 		render = true;
 	}
 
-	Ppos = objPos;
+	glm::vec3 offset(0.5f, 0.15f, 0.0f);
+	Ppos = objPos + offset;
 
 	if (render == true)
 	{
@@ -106,9 +107,7 @@ Object::~Object()
 
 bool Object::Process(float DeltaTime, camera* camera1, GLuint program)
 {
-	std::cout << this->Ppos.x <<" " << this->Ppos.z << std::endl;
-
-	Ppos += veloc;
+	Ppos += veloc * DeltaTime;
 	lifetime += DeltaTime;
 	Render(camera1, program);
 	if (lifetime >= 50.0f)
@@ -124,7 +123,7 @@ void Object::Render(camera* camera1, GLuint program)
 	float rotationAngle = 0;
 	glm::mat4 rotationZ = glm::rotate(glm::mat4(), glm::radians(rotationAngle), rotationAxisZ);
 
-	glm::vec3 scale = glm::vec3(1.0f, 1.0f, 1.0f);
+	glm::vec3 scale = glm::vec3(0.05f, 0.05f, 0.05f);
 	glm::mat4 Proj_calc = camera1->MVP(this->Ppos, scale, rotationZ);
 	glm::mat4 enemyModel = camera1->Model(this->Ppos, scale, rotationZ);
 
@@ -144,4 +143,9 @@ void Object::Render(camera* camera1, GLuint program)
 	glBindVertexArray(0);
 	glUseProgram(0);
 
+}
+
+glm::vec3 Object::retunrPpos()
+{
+	return (Ppos);
 }

@@ -48,6 +48,7 @@ GLfloat deltaTime;
 
 int fps = 0;
 
+
 CubeMap cubemap;
 LoadTexture TL;
 Audio1 audio;
@@ -63,8 +64,8 @@ TextLabel label3; //menu
 TextLabel label4; //sub menu
 TextLabel label5; //deathscrenn
 TextLabel label6; //win/loose
-TextLabel label7; //level screen
 TextLabel label8; //FPS
+TextLabel label9; //lives
 
 GLuint player;
 GLuint e1;
@@ -72,13 +73,18 @@ GLuint bg;
 
 Model model;
 
+int RoundKills = 0;
+
 float TotalScore =  0.0f;
 bool startplay = false;
 bool restartplay = true;
 int menuno = 0;
 bool winner = false;
-int gameRound = 1;
+int Lives = 3;
 float rotO = 0.0f;
+int WaveCheck;
+int EnemyCount = 0;
+bool resetPOS = true;
 
 glm::vec3 rotationAxisZ = glm::vec3(1.0f, 0.0f, 0.0f);
 float rotationAngle = 0;
@@ -146,6 +152,8 @@ GLuint indices3[] =
 	0,3,1,	//2
 };
 
+
+
 void Render()
 {
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
@@ -167,7 +175,7 @@ void Render()
 			playermanager.initializeObjPos();
 			enemymanager.initializeEPos();
 			enemymanager.initializeE2Pos();
-			gameRound = 3;
+			Lives = 3;
 			startplay = false;
 			restartplay = true;
 			winner = false;
@@ -177,6 +185,7 @@ void Render()
 
 	if (restartplay == true)
 	{
+		camera1.calculate(currentTime, 2);
 
 		if (menuno == 0)
 		{
@@ -187,7 +196,8 @@ void Render()
 			}
 			if (input.CheckKeyDown('p') == true)
 			{
-				gameRound = 1;
+				Lives = 3;
+				WaveCheck = 10;
 				enemymanager.initializespeedanddir();
 				playermanager.initializeObjPos();
 				enemymanager.initializeEPos();
@@ -228,40 +238,29 @@ void Render()
 			label2.Render();
 			label2.SetPosition(glm::vec2(-400.0f, 300.0f));
 
-			if (input.CheckKeyDown('o') == true)
+			bool debug1 = input.CheckKeyDown('o');
+			bool debug2 = input.checkDownFirst(input, 'o');
+			if (debug1 == true && debug2 == true)
 			{
+				input.checkDownFirst(input, 'o');
 				menuno = 0;
 			}
 
-		}
-		else if (menuno == 3)
-		{
-			//next round 
-			label7.Render();
-			label2.SetPosition(glm::vec2(-125.0f, 190.0f));
-			label2.Render();
-			label2.SetPosition(glm::vec2(-400.0f, 300.0f));
-			if (input.CheckKeyDown('o') == true)
-			{
-				menuno = 0;
-				startplay = true;
-				restartplay = false;
-			}
 		}
 
 	}
 
 	if (startplay == true)
 	{
-		if (gameRound == 1)
+		if (Lives > 0)
 		{
-			camera1.calculate(currentTime);
+			camera1.calculate(currentTime, 1);
 
 
 			#pragma region "bg"
 
-			/*glm::mat4 backProj_calc = camera1.MVP(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(2.0f, 1.0f, 2.0f), rotationZ);
-			glm::mat4 backmodel = camera1.Model(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(2.0f, 1.0f, 2.0f), rotationZ);
+			glm::mat4 backProj_calc = camera1.MVP(glm::vec3(0.0f, -0.0f, -2.5f), glm::vec3(4.0f, 1.0f, 4.0f), rotationZ);
+			glm::mat4 backmodel = camera1.Model(glm::vec3(0.0f, -0.0f, -2.5f), glm::vec3(4.0f, 1.0f, 4.0f), rotationZ);
 
 			glUseProgram(program);
 
@@ -277,7 +276,7 @@ void Render()
 			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 			glBindVertexArray(0);
 			glUseProgram(0);
-*/
+
 			#pragma endregion 
 
 			#pragma region "player"
@@ -312,78 +311,51 @@ void Render()
 			glUseProgram(0);
 #pragma endregion 
 
-			#pragma region "e1"
 
-			enemymanager.Emovement(deltaTime, manager1.GetSCREEN_W(), manager1.GetSCREEN_H(), audio, 1);
+			playermanager.FIRETHECANNONS_AHHHHHHHHH(deltaTime, &camera1, program);
+			WaveCheck = manager1.EnemysBegin(deltaTime, &camera1, &model, WaveCheck, resetPOS, &playermanager);
+			resetPOS = false;
 
-			glm::vec3 e1pos = glm::vec3(0.0f, 0.0f, 1.0f);
-			e1pos += enemymanager.GetEPos();
-			glm::vec3 e1scale = glm::vec3(1.0f, 1.0f, 1.0f);
 
-			glm::mat4 Proj_calc = camera1.MVP(e1pos, e1scale, rotationZ);
-			glm::mat4 enemyModel = camera1.Model(e1pos, e1scale, rotationZ);
-
-			glUseProgram(program);
-
-			GLuint mvpLoc3 = glGetUniformLocation(program, "proj_calc");
-			glUniformMatrix4fv(mvpLoc3, 1, GL_FALSE, glm::value_ptr(Proj_calc));
-
-			GLuint eModelLoc = glGetUniformLocation(program, "model");
-			glUniformMatrix4fv(eModelLoc, 1, GL_FALSE, glm::value_ptr(enemyModel));
-
-			glBindVertexArray(VAOe1);
-			glBindTexture(GL_TEXTURE_2D, e1);
-
-			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-			glBindVertexArray(0);
-			glUseProgram(0);
-
-#pragma endregion 
-
-			glm::vec4 playerbox(objPosition.y , objPosition.y - objscale.y, objPosition.x, objPosition.x + objscale.x); //up down left right
-			glm::vec4 enemybox(e1pos.y, e1pos.y - e1scale.y, e1pos.x, e1pos.x + e1scale.x);
-			bool collision = false;
-			//collision = enemymanager.checkCollision(playerbox, enemybox);
-
-			if (collision == true)
-			{
-				audio.playSound(2);
-				enemymanager.initializespeedanddir();
-				playermanager.initializeObjPos();
-				enemymanager.initializeEPos();
-				enemymanager.initializeE2Pos();
-				gameRound = 3;
-				startplay = false;
-				restartplay = true;
-				menuno = 3;
-			}
 
 			TotalScore = TotalScore + deltaTime;
 			int displayScore = static_cast<int>(TotalScore);
 			label2.SetText(to_string(displayScore));
 			label1.Render();
 			label2.Render();
+
+			label9.SetText(to_string(Lives));
+			label9.Render();
+			
+
+			if (manager1.getplayerCollision() == true)
+			{
+				manager1.setplayerCollision(false);
+				resetPOS = true;
+				audio.playSound(2);
+				enemymanager.initializespeedanddir();
+				playermanager.initializeObjPos();
+				enemymanager.initializeEPos();
+				enemymanager.initializeE2Pos();
+				Lives -= 1;
+			}
+
+		}
+		else
+		{
+			menuno = 2;
+			startplay = false;
+			restartplay = true;
 		}
 
 
 	}
 
-
 	label8.SetText(to_string(fps));
 	label8.Render();
 
-	playermanager.FIRETHECANNONS_AHHHHHHHHH(deltaTime, &camera1, program);
-
-
 	glBindVertexArray(0);
 	glUseProgram(0);
-
-
-
-	glm::vec3 modelpos = glm::vec3(0.0f, 0.0f, 1.0f);
-	glm::vec3 modelscale = glm::vec3(0.2f, 0.2f, 0.2f);
-	model.Render(modelpos, modelscale, rotationZ);
-
 
 
 	glutSwapBuffers();
@@ -446,33 +418,30 @@ int main(int argc, char **argv)
 
 	#pragma region "text"
 
-	label1 = TextLabel(manager1, "score:", "ass/fonts/comic.ttf", glm::vec2(-600.0f, 300.0f));
+	label1 = TextLabel(manager1, R"(score: 
+Lives: )", "ass/fonts/comic.ttf", glm::vec2(-600.0f, 300.0f));
 	label2 = TextLabel(manager1, "", "ass/fonts/comic.ttf", glm::vec2(-400.0f, 300.0f));
 	label3 = TextLabel(manager1, R"(dead memes: the game 
 press p to play 
 press q to quit 
 press o for other)", "ass/fonts/comic.ttf", glm::vec2(-600.0f, 300.0f));
 	label4 = TextLabel(manager1, R"(use WASD to move
+arrow keys to shoot
 press m ingame to instantly die
-stay alive aslong as possible for the highest score
-1500+ score is a win
 game created by vaughan webb 
 song used: MINE DIAMONDS - MineCraft Awesome Parodys 
-press o to return to main menu )", "ass/fonts/comic.ttf", glm::vec2(-600.0f, 300.0f) /*glm::vec3(1.0f,1.0f,1.0f), 0.75f*/);
+press o to return to main menu )", "ass/fonts/comic.ttf", glm::vec2(-600.0f, 300.0f) );
 		
 	label5 = TextLabel(manager1, R"(Game over man, GAME OVER
 you are a 
 with a final score of
-1500+ to win
 press o to return to menu)", "ass/fonts/comic.ttf", glm::vec2(-600.0f, 300.0f));
 
 	label6 = TextLabel(manager1, "", "ass/fonts/comic.ttf", glm::vec2(-380.0f, 245.0f));
-	label7 = TextLabel(manager1, R"(you died
-try to do better in the next level
-your current score is 
-1500 score to win
-press o to start the next level)", "ass/fonts/comic.ttf", glm::vec2(-600.0f, 300.0f));
-	label8 = TextLabel(manager1, "0", "ass/fonts/comic.ttf", glm::vec2(550.0f, 300.0f)/*glm::vec3(1.0f, 1.0f, 1.0f), 0.5f*/);
+
+	label8 = TextLabel(manager1, "0", "ass/fonts/comic.ttf", glm::vec2(550.0f, 300.0f));
+	label9 = TextLabel(manager1, "", "ass/fonts/comic.ttf", glm::vec2(-400.0f, 250.0f));
+
 
 #pragma endregion 
 
@@ -510,28 +479,28 @@ press o to start the next level)", "ass/fonts/comic.ttf", glm::vec2(-600.0f, 300
 
 	#pragma region "bg"
 
-	//glGenVertexArrays(1, &VAObg);
-	//glBindVertexArray(VAObg);
+	glGenVertexArrays(1, &VAObg);
+	glBindVertexArray(VAObg);
 
-	//glGenBuffers(1, &EBObg);
-	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBObg);
-	//glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices2), indices2, GL_STATIC_DRAW);
+	glGenBuffers(1, &EBObg);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBObg);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices2), indices2, GL_STATIC_DRAW);
 
-	//glGenBuffers(1, &VBObg);
-	//glBindBuffer(GL_ARRAY_BUFFER, VBObg);
-	//glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_STATIC_DRAW);
+	glGenBuffers(1, &VBObg);
+	glBindBuffer(GL_ARRAY_BUFFER, VBObg);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_STATIC_DRAW);
 
-	//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)0);
-	//glEnableVertexAttribArray(0);
-	//glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
-	//glEnableVertexAttribArray(1);
-	//glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(6 * sizeof(GLfloat)));
-	//glEnableVertexAttribArray(2);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)0);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(6 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(2);
 
-	//glActiveTexture(GL_TEXTURE2);
-	//bg = TL.loadTexture("ass/pics/bruh.jpg");
-	//glBindTexture(GL_TEXTURE_2D, bg);
-	//glUniform1i(glGetUniformLocation(program, "tex"), 2);
+	glActiveTexture(GL_TEXTURE2);
+	bg = TL.loadTexture("ass/pics/grid.jpg");
+	glBindTexture(GL_TEXTURE_2D, bg);
+	glUniform1i(glGetUniformLocation(program, "tex"), 2);
 
 #pragma endregion 
 

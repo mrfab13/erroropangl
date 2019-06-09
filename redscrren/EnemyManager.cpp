@@ -4,6 +4,13 @@ EnemyManager::EnemyManager()
 {
 }
 
+EnemyManager::EnemyManager(glm::vec3 modelpos, glm::vec3 modelscale)
+{
+	Modelpos = modelpos;
+	Modelscale = modelscale;
+
+}
+
 EnemyManager::~EnemyManager()
 {
 }
@@ -27,6 +34,16 @@ void EnemyManager::SetE2Pos(glm::vec3 temp)
 {
 	e2Pos = temp;
 
+}
+
+glm::vec3 EnemyManager::GetModelpos()
+{
+	return (Modelpos);
+}
+
+glm::vec3 EnemyManager::GetModelscale()
+{
+	return (Modelscale);
 }
 
 void EnemyManager::initializeEPos()
@@ -54,38 +71,34 @@ void EnemyManager::Setrandxy(glm::vec2)
 
 void EnemyManager::initializespeedanddir()
 {
-	speed = 0.001f;
+	speed = 0.01f;
 	dir = 1;
 	dir2 = 1;
 	Setrandxy(randxy);
 
 }
 
-void EnemyManager::Emovement(GLfloat deltaTime, float ScreenW, float screenH, Audio1& audio2, int type)
+void EnemyManager::Emovement(GLfloat deltaTime, int type, int Wavecheck)
 {
-
-	speed += 0.00001f * deltaTime;
-	glm::vec3 temp;
-	glm::vec3 temp2;
-	temp = GetEPos();
-	temp2 = GetE2Pos();
 
 	 //wd
 	if (type == 1 && (dir == 1))
 	{
-		temp.y += speed * deltaTime;
-		temp.x += speed * deltaTime;
-		SetEPos(temp);
-		if (temp.y > 1.0f)
+
+		Modelpos.z -= speed * deltaTime * randxy.y * ((float)Wavecheck / 20);
+		Modelpos.x += speed * deltaTime * randxy.x * ((float)Wavecheck / 20);
+
+		if (Modelpos.z < -6.4f)
 		{
 			dir = 4;
-			audio2.playSound(3);
+			Setrandxy(randxy);
 
 		}
-		if (temp.x > 1.0f)
+		if (Modelpos.x > 3.9f)
 		{
 			dir = 2;
-			audio2.playSound(3);
+			Setrandxy(randxy);
+
 		}
 	}
 
@@ -94,62 +107,59 @@ void EnemyManager::Emovement(GLfloat deltaTime, float ScreenW, float screenH, Au
  //aw
 		if (type == 1 && dir == 2)
 		{
-			temp.x -= speed * deltaTime;
-			temp.y += speed * deltaTime;
-			SetEPos(temp);
-			if (temp.x < (-1.0f))
+			Modelpos.x -= speed * deltaTime * randxy.x * ((float)Wavecheck / 20);
+			Modelpos.z -= speed * deltaTime * randxy.y * ((float)Wavecheck / 20);
+			if (Modelpos.x < -3.9f)
 			{
 				dir = 1;
-				audio2.playSound(3);
+				Setrandxy(randxy);
+
 
 			}
-			if (temp.y >(1.0f))
+			if (Modelpos.z < -6.4f)
 			{
 				dir = 3;
-				audio2.playSound(3);
+				Setrandxy(randxy);
+
 
 			}
 		}
-
-
-	
   //sa
 	
 		if (type == 1 && dir == 3)
 		{
-			temp.y -= speed * deltaTime;
-			temp.x -= speed * deltaTime;
-			SetEPos(temp);
-			if (temp.y < (-1.0f))
+			Modelpos.z += speed * deltaTime * randxy.y * ((float)Wavecheck / 20);
+			Modelpos.x -= speed * deltaTime * randxy.x * ((float)Wavecheck / 20);
+			if (Modelpos.z > 1.4f)
 			{
 				dir = 2;
-				audio2.playSound(3);
+				Setrandxy(randxy);
 			}
-			if (temp.x < (-1.0f))
+			if (Modelpos.x < -3.9f)
 			{
 				dir = 4;
-				audio2.playSound(3);
+				Setrandxy(randxy);
+
 			}
 		}
 
-
-	
   //ds
 	
 		if (type == 1 && dir == 4)
 		{
-			temp.x += speed * deltaTime;
-			temp.y -= speed * deltaTime;
-			SetEPos(temp);
-			if (temp.x > (1.0f))
+			Modelpos.x += speed * deltaTime * randxy.x * ((float)Wavecheck / 20);
+			Modelpos.z += speed * deltaTime * randxy.y * ((float)Wavecheck / 20);
+			if (Modelpos.x > 3.9f)
 			{
 				dir = 3;
-				audio2.playSound(3);
+				Setrandxy(randxy);
+
 			}
-			if (temp.y < (-1.0f))
+			if (Modelpos.z > 1.4f)
 			{
 				dir = 1;
-				audio2.playSound(3);
+				Setrandxy(randxy);
+
 			}
 		}
 
@@ -182,3 +192,8 @@ bool EnemyManager::checkCollision(glm::vec4 box1, glm::vec4 box2)
 	}
 	return(collision);
 }
+
+
+
+
+

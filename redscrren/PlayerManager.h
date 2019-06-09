@@ -25,6 +25,8 @@ public:
 	void setbulletDir(int Dir);
 	void FIRETHECANNONS_AHHHHHHHHH(GLfloat deltatime, camera* camera1, GLuint program);
 	void BulletProcess(GLfloat deltaTime, camera* camera1, GLuint program);
+	std::vector<Object*> ReturnBullets();
+
 
 private:
 	glm::vec3 objPos;
